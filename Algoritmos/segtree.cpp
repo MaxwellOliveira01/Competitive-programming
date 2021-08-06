@@ -38,6 +38,7 @@ struct Segtree {
     }
 
     void seg_build(int x, int l, int r, vector<ll>& s){
+        if(r < l) return;
         if(l == r){
             seg[x] = s[l];
         } else {
