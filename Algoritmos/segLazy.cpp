@@ -50,6 +50,7 @@ struct SegLazy {
     }
     
     void upd_lazy(ll node, ll l, ll r){
+        if(!lazy[node]) return;
         seg[node] += (ll)(r-l+1) * lazy[node];
         ll esq = node + node, dir = esq + 1;
         
@@ -62,13 +63,11 @@ struct SegLazy {
     }
     
     ll q(ll x, int l, int r, int i, int j){
-        if(r < i || l > j ) return 0;
         upd_lazy(x,l,r);
-
-        if(l >= i && r <= j ) 
-            return seg[x];
-        
+        if(r < i || l > j ) return 0;
+        if(l >= i && r <= j ) return seg[x];
         int mid = l + (r-l)/2;
+        upd_lazy(x,l,r);
         return merge(q(x+x,l,mid,i,j), q(x+x+1,mid+1,r,i,j));
     }
     
@@ -77,14 +76,17 @@ struct SegLazy {
     }
     
     void upd(ll x, int l, int r, int i, int j, int u){
+        upd_lazy(x,l,r);
         if(r < i || l > j) return;
         if(l >= i && r <= j){
+            upd_lazy(x,l,r);
             lazy[x] += u;
         } else {
             int mid = l + (r-l)/2;
-    
+            upd_lazy(x,l,r);
             upd(x+x,l,mid,i,j,u);
             upd(x+x+1,mid+1,r,i,j,u);
+            seg[x] = merge(seg[x+x], seg[x+x+1]);
         }
     }
     
@@ -93,10 +95,8 @@ struct SegLazy {
     }
 
 };
- 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
-    
     
 }
