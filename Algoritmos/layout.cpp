@@ -9,6 +9,10 @@ using ld = long double;
 using pii = pair<int,int>;
 using vi = vector<int>;
 
+using tii = tuple<int,int,int>;
+// auto [a,b,c] = ...
+// .insert({a,b,c})
+
 const int INF = 1e9; // INF to INT
 //const ll INF = 1e18; //INF to LL
 
@@ -21,5 +25,6 @@ RELER O ENUNCIADO!*/
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
+    
 
 }
