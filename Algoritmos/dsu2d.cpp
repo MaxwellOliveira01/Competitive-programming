@@ -34,8 +34,8 @@ struct DSU {
         sz.assign(n + 5, vector<int>(m + 5, 1));
         parent.assign(n + 5, vector<pii>(m+5,{0,0}));
  
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < m; j++){
+        for(int i = 0; i < n + 2; i++){
+            for(int j = 0; j < m + 2; j++){
                 parent[i][j] = {i,j};
             }
         }
