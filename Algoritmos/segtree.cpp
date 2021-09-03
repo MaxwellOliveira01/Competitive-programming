@@ -17,11 +17,6 @@ testar casos, n = 0? n = 1? todos os numeros iguais?
 Uma resposta ótima pode ter tamanho 2?
 RELER O ENUNCIADO!*/
 
-
-/*Published on
-https://github.com/MaxwellOliveira01/Competitive-programming/tree/master/Algoritmos
-*/
-
 struct Segtree {
 
     int n; //size do array que a seg vai ser criada em cima
@@ -53,15 +48,8 @@ struct Segtree {
     ll q(int x, int l, int r, int i, int j){
         if(r < i || l > j ) return 0;
         if(l >= i && r <= j ) return seg[x];
-
-        int mid = l + (r-l)/2;
-
-        ll esq = q(x+x,l,mid,i,j);
-        ll dir = q(x+x+1,mid+1,r,i,j);
-        
-        if(esq == 0) return dir;
-        else if(dir == 0) return esq;
-        return merge(esq,dir);
+        int mid = l + (r-l)/2;        
+        return merge(q(x+x,l,mid,i,j), q(x+x+1,mid+1,r,i,j));
     }
 
     //att posi pra val
@@ -70,13 +58,8 @@ struct Segtree {
             seg[x] = val;
         } else {
             int mid = l + (r-l)/2;
-        
-            if(posi <= mid){
-                att(x+x,l,mid,posi,val);    
-            } else {
-                att(x+x+1,mid+1,r,posi,val);
-            } 
-
+            if(posi <= mid)att(x+x,l,mid,posi,val);    
+            else att(x+x+1,mid+1,r,posi,val);
             seg[x] = merge(seg[x+x], seg[x+x+1]);
         }
     }
