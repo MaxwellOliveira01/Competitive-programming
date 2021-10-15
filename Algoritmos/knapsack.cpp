@@ -41,6 +41,8 @@ ll knapsack(vector<int>& E, vector<int>& C, int sz){
 
 vector<int> knapsack_path(vector<int>& E, vector<int>& C, int sz){
 
+    //E and C are 1-based for index.
+
     int n = (int)E.size()-1;
 
     vector<int> path;
