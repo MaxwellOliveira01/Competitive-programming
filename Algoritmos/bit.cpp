@@ -13,8 +13,8 @@ using tii = tuple<int,int,int>;
 // auto [a,b,c] = ...
 // .insert({a,b,c})
 
-const int INF = 1e9; // INF to INT
-//const ll INF = 1e18; //INF to LL
+const int oo = (int)1e9 + 5; //INF to INT
+const ll OO = 0x3f3f3f3f3f3f3f3fLL; //INF to LL
 
 /*wa? coloca long long que passa;
 testar casos, n = 0? n = 1? todos os numeros iguais?
@@ -22,18 +22,18 @@ Uma resposta ótima pode ter tamanho 2?
 RELER O ENUNCIADO!*/
 
 struct BIT {
-
-    int n;
-    vector<int> bit;
+    int n, LOGN = 0;
+    vector<ll> bit;
 
     BIT(int nn){
-        n = nn;
-        bit.assign(n + 10, 0);
+        n = nn + 10;
+        bit.resize(n + 10, 0);
+        while( (1LL << LOGN) <= n ) LOGN++;
     }
 
-    int query(int x){
+    ll query(int x){
         x++;
-        int ans = 0;
+        ll ans = 0;
         while(x > 0){
             ans += bit[x];
             x -= (x & (-x));
@@ -41,8 +41,7 @@ struct BIT {
         return ans;
     }
 
-    void update(int x, int val){
-        if(x < 0) return;
+    void update(int x, ll val){
         x++;
         while(x < (int)bit.size()){
             bit[x] += val;
@@ -51,7 +50,21 @@ struct BIT {
     }
 
     int findkth(int k){
-        //find kth smallest (required use every pos i to store the quantity of value i) 
+        //kth smallest, O(logN)
+        //use position i to count how many times value 'i' appear
+        int sum = 0, pos = 0;
+        for(int i = LOGN; i >= 0; i--){
+            if(pos + (1LL << i) < n && sum + bit[pos + (1LL << i)] < k){
+                sum += bit[pos + (1LL << i)];
+                pos += (1LL << i);
+            }
+        }
+        return pos;
+    }
+/*
+    int findkth(int k){
+        //kth smallest, O(log^2(N))
+        //use position i to count how many times value 'i' appear
         int x = 0, mx = 200;
         for(int b = n; b > 0 && mx > 0; b /= 2){
             while( x+b < n && query(x+b) < k && mx-- > 0 ){
@@ -60,31 +73,31 @@ struct BIT {
         }
         return x+1;
     }
+*/
 };
+
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
 
-    int n, q, re;
+    int n, q;
     cin >> n >> q;
-
     BIT bit(n);
-
+    vector<ll> arr(n);
     for(int i = 0; i < n; i++){
-        cin >> re;
-        bit.update(re,1);
+        cin >> arr[i];
+        bit.update(i, arr[i]);
     }
-
+    int k, a, b;
     for(int i = 0; i < q; i++){
-        cin >> re;
-        if(re > 0) bit.update(re,1);
-        else {
-            int x = bit.findkth(-re);
-            bit.update(x,-1);
+        cin >> k >> a >> b;
+        if(k == 1){
+            bit.update(a-1, b - arr[a-1]);
+            arr[a-1] = b;
+        } else {
+            cout << bit.query(b-1) - bit.query(a-2) << "\n";
         }
-    }
-
-    //cout << bit.query(n + 1) << endl;
-    cout << ( bit.query(n + 1) > 0 ? bit.findkth(1) : 0 ) << endl;
+    }   
+    
 }

@@ -9,8 +9,12 @@ using ld = long double;
 using pii = pair<int,int>;
 using vi = vector<int>;
 
-const int INF = 1e9; // INF to INT
-//const ll INF = 1e18; //INF to LL
+using tii = tuple<int,int,int>;
+// auto [a,b,c] = ...
+// .insert({a,b,c})
+
+const int oo = (int)1e9 + 5; //INF to INT
+const ll OO = 0x3f3f3f3f3f3f3f3fLL; //INF to LL
 
 /*wa? coloca long long que passa;
 testar casos, n = 0? n = 1? todos os numeros iguais?
@@ -24,12 +28,15 @@ struct Segtree {
 
     Segtree(vector<ll>& s){
         n = (int)s.size();
-        seg.assign(n+n+n+n, 0);
+        seg.resize(n+n+n+n, 0);
         seg_build(1,0,n-1,s);
     }
 
     ll merge(ll a, ll b){
-        return a+b;
+        //return a+b;
+        if(!a) a = OO;
+        if(!b) b = OO;
+        return min(a,b);
     }
 
     void seg_build(int x, int l, int r, vector<ll>& s){
@@ -53,7 +60,7 @@ struct Segtree {
     }
 
     //att posi pra val
-    void att(int x, int l, int r, int posi, int val){
+    void att(int x, int l, int r, int posi, ll val){
         if(l == r){
             seg[x] = val;
         } else {
@@ -64,12 +71,31 @@ struct Segtree {
         }
     }
  
+    int findkth(int x, int l, int r, int k){
+        if(l == r){
+            return l;
+        } else {
+            int mid = l + (r-l)/2;
+            if(seg[x+x] >= k){
+                return findkth(x+x,l,mid,k);
+            } else {
+                return findkth(x+x+1,mid+1, r, k - seg[x+x]);    
+            }
+        }
+    }
+
     ll query(int l, int r){
         return q(1, 0, n-1, l, r);
     }
 
-    void update(int posi, int val){ //alterar em posi pra val
+    void update(int posi, ll val){ //alterar em posi pra val
         att(1, 0, n-1, posi, val);
+    }
+
+    int findkth(int k){
+        //kth smallest, O(logN)
+        //use position i to count how many times value 'i' appear
+        return findkth(1,0,n-1,k);
     }
 
 };
