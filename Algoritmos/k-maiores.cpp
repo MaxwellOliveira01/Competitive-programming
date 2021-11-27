@@ -1,4 +1,4 @@
-struct Valor {
+struct SetSum {
     ll s = 0;
     multiset<ll> mt;
     void add(ll x){
@@ -10,15 +10,15 @@ struct Valor {
         if(f == mt.end()) return 0;
         mt.erase(f);
         s -= x;
-        return 1; //retirou
+        return 1;
     }
 };
 
-struct Mult {
+struct BigK {
     int k;
-    Valor gt, mt;
-    Mult(int kk){
-        k = kk;
+    SetSum gt, mt;
+    BigK(int _k){
+        k = _k;
     }
     void balancear(){
         while((int)gt.mt.size() < k && (int)mt.mt.size()){
@@ -34,12 +34,12 @@ struct Mult {
             gt.add(v); mt.add(u);
         }
     }
-    void add(int x){
+    void add(ll x){
         mt.add(x);
         balancear();
     }
-    void rem(int x){
-        x = -x;
+    void rem(ll x){
+        //x = -x;
         if(mt.pop(x) == 0)
             gt.pop(x);
         balancear();
