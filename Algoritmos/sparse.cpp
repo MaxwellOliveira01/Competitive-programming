@@ -20,28 +20,19 @@ RELER O ENUNCIADO!*/
 
 struct Sparse{
   
-    vector<vector<ll>> arr;
-    vector<int> floor_log;
+    //inteiro mesmo?
+    vector<vector<int>> arr;
 
-    //chamar build_table_log na main
-    ll op(ll& a, ll& b){
+    int op(int& a, int& b){ //min, max, gcd, lcm, and, or
         return min(a,b);
-        //return max(a,b);
         //return __gcd(a,b);
-    }
- 
-    void build_table_log(int MAXN){
-        floor_log.resize(MAXN);
-        floor_log[1] = 0;
-        for(int i = 2; i < MAXN; i++)
-            floor_log[i] = floor_log[i/2]+1;
+        //return max(a,b);
     }
 
-    Sparse(vector<ll>& v){ //Constrói a tabela
+    Sparse(vector<int>& v){ //Constrói a tabela
         int n = v.size(), logn = 0;
         while((1<<logn) <= n) logn++;
-        build_table_log(n + 10);
-        arr.assign(n, vector<ll>(logn, 0));
+        arr.assign(n, vector<int>(logn, 0));
         for(int i = 0; i < n; i++)
             arr[i][0] = v[i];
         for(int k = 1; k < logn; k++){
@@ -49,25 +40,33 @@ struct Sparse{
                 if(i + ( 1 << k) -1 >= n)
                     break;
                 int p = i+( 1 << (k-1) );                
-                /*fazendo o intervalo usando a linha de cima da tabela,
-                [i, 2^k-1] -> [i, 2^(k-1)-1] + [i+2^(k-1), 2^(k-1)-1  ].
-                Por exemplo, o intervalo XXXX pode ser escrito como a operação
-                em  (XXX)X e X(XXX)*. Existe intercessão.*/
                 arr[i][k] = op( arr[i][ k-1 ] , arr[p][k-1]  );
             }
         }
     }
 
-    ll query(int l, int r){
-        int pot = floor_log[r-l+1];
+    int query(int l, int r){
+        int pot = 31 - __builtin_clz(r-l+1); //r-l+1 são INTEIROS, não ll
         int k = (1 << pot) ;      
         return op(  arr[l][pot] , arr[  r - (k-1)  ][pot]   );
-    }  
+    }   
  
 };
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
+
+    int n, q;
+    cin >> n >> q;
+    vector<int> arr(n);
+    for(auto &x : arr) cin >> x;
+    Sparse sp(arr);
+    for(int i = 0; i < q; i++){
+        int l, r; 
+        cin >> l >> r;
+        l--; r--;
+        cout << sp.query(l, r) << "\n";
+    }
 
 }
