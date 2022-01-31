@@ -22,7 +22,31 @@ testar casos, n = 0? n = 1? todos os numeros iguais?
 Uma resposta ótima pode ter tamanho 2?
 RELER O ENUNCIADO!*/
 
-//tested with SPOJ DISQUERY and SPOJ QTREE2 
+//tested with SPOJ DISQUERY, SPOJ QTREE2 and Codechef TALCA
+#include <bits/stdc++.h>
+#define debug(x) cout << "[" << #x << " = " << x << "] ";
+#define debugendl(x) cout << "[" << #x << " = " << x << "]\n";
+#define ff first
+#define ss second
+
+using namespace std;
+using ll = long long;
+using ld = long double;
+using pii = pair<int,int>;
+using vi = vector<int>;
+
+using tii = tuple<int,int,int>;
+// auto [a,b,c] = ...
+// .insert({a,b,c})
+
+const int oo = (int)1e9 + 5; //INF to INT
+const ll OO = 0x3f3f3f3f3f3f3f3fLL; //INF to LL
+
+/*wa? coloca long long que passa;
+testar casos, n = 0? n = 1? todos os numeros iguais?
+Uma resposta ótima pode ter tamanho 2?
+RELER O ENUNCIADO!*/
+
 struct QueryTree {
     int n, t = 0, l = 3, build = 0, euler = 0;
     vector<ll> dist;
@@ -94,6 +118,10 @@ struct QueryTree {
             }
         }
         return sobe[lca][0];
+    }
+
+    int lca(int u, int v, int root) { //return lca of u and v when tree is rooted at 'root'
+        return lca(u, v) ^ lca(v, root) ^ lca(root, u); //magic
     }
 
     int up_k(int u, int qt){ //return node k levels higher starting from u
@@ -195,4 +223,5 @@ int main() {
         }
         cout << "\n";
     }
+
 }
