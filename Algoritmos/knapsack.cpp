@@ -1,5 +1,6 @@
 #include <bits/stdc++.h>
-#define debug(x) cout << "[" << #x << " = " << x << "] "
+#define debug(x) cout << "[" << #x << " = " << x << "] ";
+#define debugendl(x) cout << "[" << #x << " = " << x << "]\n";
 #define ff first
 #define ss second
 
@@ -13,7 +14,7 @@ using tii = tuple<int,int,int>;
 // auto [a,b,c] = ...
 // .insert({a,b,c})
 
-const int oo = (int)1e9; //INF to INT
+const int oo = (int)1e9 + 5; //INF to INT
 const ll OO = 0x3f3f3f3f3f3f3f3fLL; //INF to LL
 
 /*wa? coloca long long que passa;
@@ -21,76 +22,89 @@ testar casos, n = 0? n = 1? todos os numeros iguais?
 Uma resposta ótima pode ter tamanho 2?
 RELER O ENUNCIADO!*/
 
-ll knapsack(vector<int>& E, vector<int>& C, int sz){
-    //E and C are 1-based for index.
+//table[idx][porcen] = menor tempo pra esse estado
+//= min(
+//  table[idx - 1][porcen]
+//  table[idx][porcen - pi[i]] + ti[i]   )
 
-    int n = (int)E.size()-1;
-    vector< vector<ll> > dp(n+5, vector<ll>(sz+5));
+const int MAXP = 150;
 
-    for(int i = 1; i <= n; i++){
-        for(int j = 1; j <= sz; j++){
-            if(C[i] > j){
-                dp[i][j] = dp[i-1][j];
+ll knapsack(vector<ll>& weight, vector<ll>& value, int W) {
+
+    int n = (int)value.size();
+    vector<vector<ll>> table(W + 1, vector<ll>(n + 1, 0));
+
+    for(int k = 1; k <= n; k++) {
+        for(int i = 0; i <= W; i++) {
+            if(i - weight[k - 1] >= 0) {
+                table[i][k] = max(table[i][k - 1], 
+                    value[k - 1] + table[i - weight[k - 1]][k - 1]); 
             } else {
-                dp[i][j] = max(dp[i-1][j], dp[i-1][j-C[i]]+E[i]);
-            }
-        }
-    }
-    return dp[n][sz];
-}
-
-vector<int> knapsack_path(vector<int>& E, vector<int>& C, int sz){
-
-    //E and C are 1-based for index.
-
-    int n = (int)E.size()-1;
-
-    vector<int> path;
-    vector< vector<pii > > go(n+5, vector<pii>(sz+5, {-1,-1}));
-    vector< vector<ll> > dp(n+5, vector<ll>(sz+5));
-
-    for(int i = 1; i <= n; i++){
-        for(int j = 1; j <= sz; j++){
-            if(C[i] > j){
-                dp[i][j] = dp[i-1][j];
-                go[i][j] = go[i-1][j];
-            } else {
-                dp[i][j] = max(dp[i-1][j], dp[i-1][j-C[i]]+E[i]);
-                if(dp[i-1][j] > dp[i-1][j-C[i]]+E[i]){
-                    go[i][j] = go[i-1][j];
-                } else {
-                    go[i][j] = {i-1,j-C[i]};
-                }
+                table[i][k] = max(table[i][k - 1], table[i][k]);
             }
         }
     }
 
-    pii pq = {n,sz};
-    while(pq.ff != -1 || pq.ss != -1){
-        pq = go[pq.ff][pq.ss];
-        path.push_back(pq.ff + 1); //indice
+    /*
+    int per = W;
+    vector<int> idx;
+    for(int k = n; k > 0; k--) {
+        if(table[per][k] == table[per][k - 1]){
+            continue;
+        } else {
+            idx.push_back(k - 1);
+            per -= weight[k - 1];
+        }
     }
-    path.pop_back();
+    */
 
-    return path;
+/*
+    //knapsack "invertida" -> minimizar + nao contar 2x o mesmo item
+    //separa os estados em 2 classes, por valor mesmo e por >= algo
+    //tipo [0,99] e +1 representando >= 100
+    int n = (int)value.size();
+    vector<vector<ll>> table(W + 1, vector<ll>(n + 1, OO));
+    table[0][0] = 0;
+    for(int k = 1; k <= n; k++) {
+        table[0][k] = 0;
+        for(int i = W; i > 0; i--) {
+            int prev =  max(0, i - weight[k - 1]);
+            table[i][k] = min(table[i][k - 1], t[k - 1] + table[prev][k - 1]);
+        }
+    }
+    int per = 100;
+    vector<int> idx;
+    for(int k = n; k > 0; k--) {
+        if(table[per][k] == table[per][k - 1]){
+            continue;
+        } else {
+            idx.push_back(k - 1);
+            per = max<int>(0, per - weight[k - 1]);
+        }
+    }
+*/
+    return table[W][n];
 }
 
+void solve() {
+    
+    int n, w;
+    cin >> n >> w;
+    vector<ll> weight(n), value(n);
+    for(int i = 0; i < n; i++) {
+        cin >> weight[i] >> value[i];
+    }
+    cout << knapsack(weight, value, w) << "\n";
+}
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(NULL);
 
-    int n, t;
-    cin >> n >> t;
-    vector<int> E(n+1), C(n+1); //Energia ganha / custo
- 
-    for(int i = 1; i <= n; i++){
-        cin >> C[i] >> E[i];
+    int t = 1;
+    //cin >> t;
+    while(t--) {
+        solve();
     }
 
-    auto ans = knapsack_path(E,C,t);
-    cout << (int)ans.size() << "\n";
-    for(auto v : ans)
-        cout << v << " ";
-    cout << "\n";
 }
