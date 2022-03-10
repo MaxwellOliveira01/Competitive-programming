@@ -72,7 +72,7 @@ ll knapsack(vector<ll>& weight, vector<ll>& value, int W) {
             table[i][k] = min(table[i][k - 1], t[k - 1] + table[prev][k - 1]);
         }
     }
-    int per = 100;
+    int per = W;
     vector<int> idx;
     for(int k = n; k > 0; k--) {
         if(table[per][k] == table[per][k - 1]){
