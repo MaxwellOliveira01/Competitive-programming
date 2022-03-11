@@ -28,6 +28,7 @@ const int block_size = 300; //yes, const value for the MAXN
 struct Query {
     int l, r, idx;
     Query(): l(0), r(0), idx(0) {};
+    Query(int _l, int _r, int _idx): l(_l), r(_r), idx(_idx) {};
     bool const operator<(Query& b) {
         if(l / block_size != b.l / block_size )
             return l < b.l;
