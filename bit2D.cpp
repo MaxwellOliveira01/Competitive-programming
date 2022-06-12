@@ -52,6 +52,7 @@ struct BIT2D {
 
     int query(int x, int y, int p, int q) {
         //x...p on line, y...q on column
+        //sum from [x][y] to [p][q];
         x++; y++; p++; q++;
         assert(x > 0 && y > 0 && x <= n && y <= m);
         assert(p > 0 && q > 0 && p <= n && q <= m);
