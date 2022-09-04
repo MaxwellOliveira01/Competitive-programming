@@ -22,14 +22,30 @@ testar casos, n = 0? n = 1? todos os numeros iguais?
 Uma resposta ótima pode ter tamanho 2?
 RELER O ENUNCIADO!*/
 
-//table[idx][porcen] = menor tempo pra esse estado
-//= min(
-//  table[idx - 1][porcen]
-//  table[idx][porcen - pi[i]] + ti[i]   )
+//Submeter em c++ 64bits otimiza o long long
+ll knapsack(vector<ll>& weight, vector<ll>& value, int W) {
+    //Usar essa knapsack se só precisar do resultado final.
+    //O(W) em memória
+    vector<vector<ll>> table(2, vector<ll>(W + 1, 0));
+    int n = (int)value.size();
 
-const int MAXP = 150;
+    for(int k = 1; k <= n; k++) {
+        for(int i = 0; i <= W; i++) {
+            if(i - weight[k - 1] >= 0) {
+                table[k % 2][i] = max(table[ (k - 1) % 2 ][i], 
+                    value[k - 1] + table[(k - 1) % 2][i - weight[k - 1]]); 
+            } else {
+                table[k % 2][i] = max(table[(k - 1) % 2][i], table[k % 2][i]);
+            }
+        }
+    }
+
+    return table[n % 2][W];
+}
 
 ll knapsack(vector<ll>& weight, vector<ll>& value, int W) {
+    //Usar essa knapsack se, em algum momento, precisar recuperar os indices
+    //O(NW) em memória
 
     int n = (int)value.size();
     vector<vector<ll>> table(W + 1, vector<ll>(n + 1, 0));
@@ -58,31 +74,6 @@ ll knapsack(vector<ll>& weight, vector<ll>& value, int W) {
     }
     */
 
-/*
-    //knapsack "invertida" -> minimizar + nao contar 2x o mesmo item
-    //separa os estados em 2 classes, por valor mesmo e por >= algo
-    //tipo [0,99] e +1 representando >= 100
-    int n = (int)value.size();
-    vector<vector<ll>> table(W + 1, vector<ll>(n + 1, OO));
-    table[0][0] = 0;
-    for(int k = 1; k <= n; k++) {
-        table[0][k] = 0;
-        for(int i = W; i > 0; i--) {
-            int prev =  max(0, i - weight[k - 1]);
-            table[i][k] = min(table[i][k - 1], t[k - 1] + table[prev][k - 1]);
-        }
-    }
-    int per = W;
-    vector<int> idx;
-    for(int k = n; k > 0; k--) {
-        if(table[per][k] == table[per][k - 1]){
-            continue;
-        } else {
-            idx.push_back(k - 1);
-            per = max<int>(0, per - weight[k - 1]);
-        }
-    }
-*/
     return table[W][n];
 }
 
