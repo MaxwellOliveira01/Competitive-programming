@@ -95,6 +95,7 @@ struct Segtree {
     int findkth(int k){
         //kth smallest, O(logN)
         //use position i to count how many times value 'i' appear
+        //merge must be the sum of nodes
         return findkth(1,0,n-1,k);
     }
 
