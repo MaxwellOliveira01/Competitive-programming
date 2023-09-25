@@ -77,6 +77,45 @@ ll knapsack(vector<ll>& weight, vector<ll>& value, int W) {
     return table[W][n];
 }
 
+
+const int MOD = 998244353;
+
+struct Knapsack {
+
+    int S; // max value
+    vector<ll> dp;
+
+    Knapsack(int S_) {
+        S = S_ + 5;
+        dp.assign(S, 0);
+        dp[0] = 1;
+    }
+
+    void Add(int val) {
+        if(val <= 0 || val >= S) return;
+        for(int i = S - 1; i >= val; i--) {
+            dp[i] += dp[i - val];
+            dp[i] %= MOD;
+        }
+    }
+
+    void Rem(int val) {
+        if(val <= 0 || val >= S) return;
+        for(int i = val; i < S; i++) {
+            dp[i] += MOD - dp[i - val];
+            dp[i] %= MOD;   
+        }
+    }
+
+    int Query(int val) {
+        // # of ways to select a subset of numbers with sum = val
+        if(val <= 0 || val >= S) return 0;
+        return dp[val];
+    }
+
+};
+
+
 void solve() {
     
     int n, w;
