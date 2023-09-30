@@ -43,7 +43,6 @@ struct Trie{
             cur = trie[cur][b];
             paths[cur]++;
         }
-        finish[cur]--;
         paths[cur]++;
     }
 
