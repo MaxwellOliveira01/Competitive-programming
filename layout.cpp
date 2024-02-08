@@ -1,5 +1,12 @@
+// https://codeforces.com/blog/entry/125435
+#ifdef MAXWELL_LOCAL_DEBUG
+#include "debug/debug_template.cpp"
+#else
+#define debug(...)
+#define debugArr(arr, n)
+#endif
+
 #include <bits/stdc++.h>
-#define debug(x) cout << "[" << #x << " = " << x << "] "
 #define ff first
 #define ss second
 
@@ -16,13 +23,15 @@ using tii = tuple<int,int,int>;
 const int oo = (int)1e9 + 5; //INF to INT
 const ll OO = 0x3f3f3f3f3f3f3f3fLL; //INF to LL
 
-/*wa? coloca long long que passa;
-testar casos, n = 0? n = 1? todos os numeros iguais?
-Uma resposta ótima pode ter tamanho 2?
-RELER O ENUNCIADO!*/
+/*
+ulimit -s 4096000 &&
+g++ -std=c++17 -Wall -Wshadow -fsanitize=address -O2 -D MAXWELL_LOCAL_DEBUG -o cod  a.cpp
+*/
 
-void solve(){
+void solve() {  
+
     
+
 }
 
 int main() {
@@ -30,8 +39,10 @@ int main() {
     cin.tie(NULL);
 
     int t = 1;
-    cin >> t;
-    while(t--){
+    //cin >> t;
+    
+    while(t--) {
         solve();
     }
+
 }
