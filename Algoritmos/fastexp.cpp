@@ -25,7 +25,7 @@ https://github.com/MaxwellOliveira01/Competitive-programming/tree/master/Algorit
 */
 
 
-ll power(ll a, ll b) {
+ll fexp(ll a, ll b) {
     ll result = 1;
     while(b) {
         if (b % 2) result = (result * a) % MOD;
