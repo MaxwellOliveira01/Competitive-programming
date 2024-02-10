@@ -222,7 +222,6 @@ struct SegLazy {
 
 };
 
-
 void solve() {  
 
     int n, q;

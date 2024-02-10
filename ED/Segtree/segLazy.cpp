@@ -78,7 +78,7 @@ struct SegLazy {
         return q(1, 0, n-1, l, r);
     }
     
-    void upd(ll x, int l, int r, int i, int j, int u){
+    void upd(ll x, int l, int r, int i, int j, ll u){
         upd_lazy(x,l,r);
         if(r < i || l > j) return;
         if(l >= i && r <= j){
